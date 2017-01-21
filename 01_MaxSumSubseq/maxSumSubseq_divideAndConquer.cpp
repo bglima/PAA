@@ -15,6 +15,7 @@ subseq divideAndConquer(int left, int right)
 {
 	// Para quando left = right (1 elem. no interv.)
 	if (left == right) {
+		// Se o elemento for positivo, retorne o mesmo
 		if( a[left] > 0 ) {
 			subseq el;
 			el.sum = a[left];
@@ -22,6 +23,7 @@ subseq divideAndConquer(int left, int right)
 			el.r = left;
 			return el;
 		}
+		// Caso contrário, o elmento nulo será a soma máxima
 		else {
 			subseq el;
 			el.sum = 0;
@@ -69,13 +71,13 @@ subseq divideAndConquer(int left, int right)
 		mMaxSubseq.r = rSide.r;
 		mMaxSubseq.l = lSide.l;
 		
-		// Max sum subsequence is in the right side
+		// Subsequência máxima está no lado esquerdo
 		if( lMaxSubseq.sum >= rMaxSubseq.sum && lMaxSubseq.sum >= mMaxSubseq.sum) return lMaxSubseq;
 		
-		// Max sum subsequence is in the left side
+		// Subsequência máxima está no lado direito
 		if( rMaxSubseq.sum >= lMaxSubseq.sum && rMaxSubseq.sum >= mMaxSubseq.sum) return rMaxSubseq;
 		
-		// Max sum subsequence is in the middle
+		// Subsequência máxima está cruzando
 		return mMaxSubseq;
 	}	
 }
