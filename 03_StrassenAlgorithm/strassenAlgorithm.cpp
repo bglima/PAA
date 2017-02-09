@@ -6,6 +6,7 @@ typedef vector< vector <int> > vi;
 
 void mSum( vi &A, vi &B, vi &C, int size );
 void mSub( vi &A, vi &B, vi &C, int size );
+void mMul( vi &A, vi &B, vi &C, int size );
 void mPrint( vi &A, int size );
 
 
@@ -24,10 +25,9 @@ int main() {
 			for(int j=0; j < size; ++j)
 				cin >> m2[i][j];
 
-		mSum( m1, m2, m3, size);
+		mMul( m1, m2, m3, size);
 		mPrint( m3, size );
-		mSub( m1, m2, m3, size);
-		mPrint( m3, size );
+
 	}
 		
 }
@@ -56,4 +56,11 @@ void mSub( vi &A, vi &B, vi &C, int size )
 	for ( int i = 0; i < size; i++ )
 		for ( int j = 0; j < size; j++ )
 			C[i][j] = A[i][j] - B[i][j];
+}
+
+void mMul( vi &A, vi &B, vi &C, int size ) {
+	for ( int i = 0; i < size; ++i )
+		for ( int k = 0; k < size; ++k ) 
+			for ( int j = 0; j < size; ++j )
+				C[i][j] += A[i][k] * B[k][j];
 }
