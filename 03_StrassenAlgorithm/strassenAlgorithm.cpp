@@ -4,7 +4,7 @@
 
 using namespace std;
 
-typedef vector< vector <int> > vi;
+typedef vector< vector<float> > vi;
 
 void mSum( vi &A, vi &B, vi &C, int size );
 void mSub( vi &A, vi &B, vi &C, int size );
@@ -15,9 +15,9 @@ void mPrint( vi &A, int size );
 int main() {
 	int size;
 	while ( cin >> size ) {
-		vi m1 (size, vector<int>(size));
-		vi m2 (size, vector<int>(size));
-		vi m3 (size, vector<int>(size));
+		vi m1 (size, vector<float>(size));
+		vi m2 (size, vector<float>(size));
+		vi m3 (size, vector<float>(size));
 		
 		for(int i = 0; i < size; ++i)
 			for(int j=0; j < size; ++j)
@@ -71,27 +71,27 @@ void mMulSt( vi &A, vi &B, vi &C, int size ){
 		return;		
 	} else  {
 		int newSize = size/2;
-		vi a11(newSize, vector<int>(newSize)),
-		   a12(newSize, vector<int>(newSize)),
-		   a21(newSize, vector<int>(newSize)),
-		   a22(newSize, vector<int>(newSize)),		   
-		   b11(newSize, vector<int>(newSize)),
-		   b12(newSize, vector<int>(newSize)),
-		   b21(newSize, vector<int>(newSize)),
-		   b22(newSize, vector<int>(newSize)),
-		   aRes(newSize, vector<int>(newSize)),
-		   bRes(newSize, vector<int>(newSize)),
-		   c11(newSize, vector<int>(newSize)),
-		   c12(newSize, vector<int>(newSize)),
-		   c21(newSize, vector<int>(newSize)),
-		   c22(newSize, vector<int>(newSize)),
-		   p1(newSize, vector<int>(newSize)),
-		   p2(newSize, vector<int>(newSize)),
-		   p3(newSize, vector<int>(newSize)),
-		   p4(newSize, vector<int>(newSize)),
-		   p5(newSize, vector<int>(newSize)),
-		   p6(newSize, vector<int>(newSize)),
-		   p7(newSize, vector<int>(newSize));
+		vi a11(newSize, vector<float>(newSize)),
+		   a12(newSize, vector<float>(newSize)),
+		   a21(newSize, vector<float>(newSize)),
+		   a22(newSize, vector<float>(newSize)),		   
+		   b11(newSize, vector<float>(newSize)),
+		   b12(newSize, vector<float>(newSize)),
+		   b21(newSize, vector<float>(newSize)),
+		   b22(newSize, vector<float>(newSize)),
+		   aRes(newSize, vector<float>(newSize)),
+		   bRes(newSize, vector<float>(newSize)),
+		   c11(newSize, vector<float>(newSize)),
+		   c12(newSize, vector<float>(newSize)),
+		   c21(newSize, vector<float>(newSize)),
+		   c22(newSize, vector<float>(newSize)),
+		   p1(newSize, vector<float>(newSize)),
+		   p2(newSize, vector<float>(newSize)),
+		   p3(newSize, vector<float>(newSize)),
+		   p4(newSize, vector<float>(newSize)),
+		   p5(newSize, vector<float>(newSize)),
+		   p6(newSize, vector<float>(newSize)),
+		   p7(newSize, vector<float>(newSize));
 		int i, j;
 
 		// Filling the 4 sub-matrices
