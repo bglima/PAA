@@ -8,7 +8,7 @@
 using namespace std;
 
 //    Matrix types
-typedef vector<int> vt;		// Unidimensional vector type
+typedef vector< int > vt;	// Unidimensional vector type. Define matrix type here.
 typedef vector< vt > vvt;	// Bimidmensional vector type
 
 void mSum( vvt &A, vvt &B, vvt &C, int size );
