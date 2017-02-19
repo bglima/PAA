@@ -1,35 +1,63 @@
 #include<bits/stdc++.h>
 
+//    Max size of Strassen subsequent divisions. After this size, 
+//    Its executed the ordinary matrix multiplication before starting
+// the recombination.
 #define leafSize 2 
 
 using namespace std;
 
+//    Matrix types
 typedef vector< vector <int> > vi;
 
 void mSum( vi &A, vi &B, vi &C, int size );
 void mSub( vi &A, vi &B, vi &C, int size );
 void mMul( vi &A, vi &B, vi &C, int size );
 void mMulSt( vi &A, vi &B, vi &C, int size ); 
+vi mExp( vi &A, int n, int size );
 void mPrint( vi &A, int size );
 
 int main() {
-	int size;
+	int size, maxPower;
 	while ( cin >> size ) {
-		vi m1 (size, vector<int>(size));
-		vi m2 (size, vector<int>(size));
-		vi m3 (size, vector<int>(size));
+		vi m1 (size, vector<int>(size)); // Input matrix
+		vi m2 (size, vector<int>(size)); // Result matrix
+		
+		cin >> maxPower;	
 		
 		for(int i = 0; i < size; ++i)
-			for(int j=0; j < size; ++j)
+			for(int j=0; j < size; ++j) {
 				cin >> m1[i][j];
+			}
 		
-		for(int i = 0; i < size; ++i)
-			for(int j=0; j < size; ++j)
-				cin >> m2[i][j];
+		m2 = mExp( m1, maxPower, size );
+		mPrint(m2, size);
+	}
+}
 
-		mMulSt( m1, m2, m3, size);
-		mPrint( m3, size );
-	}		
+vi mExp( vi &A, int n, int size ) {
+	if ( n == 0 ) {
+		vi result (size, vector<int>(size));
+		for( int i = 0; i < size; ++i)
+			for( int j = 0; j < size; ++j)
+				result[i][j] = 1;
+		return result;
+	} else if ( n == 1 ) {
+		return A;
+	} else if ( n % 2 == 0 ) {
+		vi result (size, vector<int>(size));
+		mMul(A, A, result, size);
+		return mExp(result, n / 2, size);
+	} else if ( n % 2 != 0 ) {
+		vi result (size, vector<int>(size));
+		vi partialMultiplication (size, vector<int>(size));
+		vi partialPower (size, vector<int>(size));
+
+		mMul(A, A, partialMultiplication, size);
+		partialPower = mExp(partialMultiplication, (n-1)/2, size);
+		mMul(A, partialPower, result, size);
+		return result;
+	}
 }
 
 void mPrint( vi &A, int size )
@@ -154,7 +182,5 @@ void mMulSt( vi &A, vi &B, vi &C, int size ){
 				C[i + newSize][j] = c21[i][j];
 				C[i + newSize][j + newSize] = c22[i][j];
 			}
- 
-		
 	}
 }
