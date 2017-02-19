@@ -1,27 +1,29 @@
 #include<bits/stdc++.h>
 
-//    Max size of Strassen subsequent divisions. After this size, 
-//    Its executed the ordinary matrix multiplication before starting
+//    Max size of Strassen subsequent divvtsions. After this size, 
+//    It's executed the ordinary matrix multiplication before starting
 // the recombination.
 #define leafSize 2 
 
 using namespace std;
 
 //    Matrix types
-typedef vector< vector <int> > vi;
+typedef vector<int> vt;		// Unidimensional vector type
+typedef vector< vt > vvt;	// Bimidmensional vector type
 
-void mSum( vi &A, vi &B, vi &C, int size );
-void mSub( vi &A, vi &B, vi &C, int size );
-void mMul( vi &A, vi &B, vi &C, int size );
-void mMulSt( vi &A, vi &B, vi &C, int size ); 
-vi mExp( vi &A, int n, int size );
-void mPrint( vi &A, int size );
+void mSum( vvt &A, vvt &B, vvt &C, int size );
+void mSub( vvt &A, vvt &B, vvt &C, int size );
+void mMul( vvt &A, vvt &B, vvt &C, int size );
+void mMulSt( vvt &A, vvt &B, vvt &C, int size ); 
+vvt mExp( vvt &A, int n, int size );
+void mPrint( vvt &A, int size );
 
+// Main program
 int main() {
 	int size, maxPower;
 	while ( cin >> size ) {
-		vi m1 (size, vector<int>(size)); // Input matrix
-		vi m2 (size, vector<int>(size)); // Result matrix
+		vvt m1 (size, vt(size)); // Input matrix
+		vvt m2 (size, vt(size)); // Result matrix
 		
 		cin >> maxPower;	
 		
@@ -35,9 +37,10 @@ int main() {
 	}
 }
 
-vi mExp( vi &A, int n, int size ) {
+// Divide and conquer exponential algorithm
+vvt mExp( vvt &A, int n, int size ) {
 	if ( n == 0 ) {
-		vi result (size, vector<int>(size));
+		vvt result (size, vt(size));
 		for( int i = 0; i < size; ++i)
 			for( int j = 0; j < size; ++j)
 				result[i][j] = 1;
@@ -45,13 +48,13 @@ vi mExp( vi &A, int n, int size ) {
 	} else if ( n == 1 ) {
 		return A;
 	} else if ( n % 2 == 0 ) {
-		vi result (size, vector<int>(size));
+		vvt result (size, vt(size));
 		mMul(A, A, result, size);
 		return mExp(result, n / 2, size);
 	} else if ( n % 2 != 0 ) {
-		vi result (size, vector<int>(size));
-		vi partialMultiplication (size, vector<int>(size));
-		vi partialPower (size, vector<int>(size));
+		vvt result (size, vt(size));
+		vvt partialMultiplication (size, vt(size));
+		vvt partialPower (size, vt(size));
 
 		mMul(A, A, partialMultiplication, size);
 		partialPower = mExp(partialMultiplication, (n-1)/2, size);
@@ -60,7 +63,8 @@ vi mExp( vi &A, int n, int size ) {
 	}
 }
 
-void mPrint( vi &A, int size )
+// matrixPrint
+void mPrint( vvt &A, int size )
 {
 	for ( int i = 0; i < size; i++ )
 	{
@@ -71,55 +75,58 @@ void mPrint( vi &A, int size )
 	cout << endl;
 }
 
-void mSum( vi &A, vi &B, vi &C, int size )
+// matrixSum
+void mSum( vvt &A, vvt &B, vvt &C, int size )
 {
 	for ( int i = 0; i < size; i++ )
 		for ( int j = 0; j < size; j++ )
 			C[i][j] = A[i][j] + B[i][j];
 }
 
-
-void mSub( vi &A, vi &B, vi &C, int size )
+// matrixSubtract
+void mSub( vvt &A, vvt &B, vvt &C, int size )
 {
 	for ( int i = 0; i < size; i++ )
 		for ( int j = 0; j < size; j++ )
 			C[i][j] = A[i][j] - B[i][j];
 }
 
-void mMul( vi &A, vi &B, vi &C, int size ) {
+// ordinary matrixMultiplication
+void mMul( vvt &A, vvt &B, vvt &C, int size ) {
 	for ( int i = 0; i < size; ++i )
 		for ( int k = 0; k < size; ++k ) 
 			for ( int j = 0; j < size; ++j )
 				C[i][j] += A[i][k] * B[k][j];
 }
 
-void mMulSt( vi &A, vi &B, vi &C, int size ){
+// Strassen matrixMultiplication
+void mMulSt( vvt &A, vvt &B, vvt &C, int size ){
 	if ( size <= leafSize ) {
 		mMul( A, B, C, size);
 		return;		
 	} else  {
 		int newSize = size/2;
-		vi a11(newSize, vector<float>(newSize)),
-		   a12(newSize, vector<float>(newSize)),
-		   a21(newSize, vector<float>(newSize)),
-		   a22(newSize, vector<float>(newSize)),		   
-		   b11(newSize, vector<float>(newSize)),
-		   b12(newSize, vector<float>(newSize)),
-		   b21(newSize, vector<float>(newSize)),
-		   b22(newSize, vector<float>(newSize)),
-		   aRes(newSize, vector<float>(newSize)),
-		   bRes(newSize, vector<float>(newSize)),
-		   c11(newSize, vector<float>(newSize)),
-		   c12(newSize, vector<float>(newSize)),
-		   c21(newSize, vector<float>(newSize)),
-		   c22(newSize, vector<float>(newSize)),
-		   p1(newSize, vector<float>(newSize)),
-		   p2(newSize, vector<float>(newSize)),
-		   p3(newSize, vector<float>(newSize)),
-		   p4(newSize, vector<float>(newSize)),
-		   p5(newSize, vector<float>(newSize)),
-		   p6(newSize, vector<float>(newSize)),
-		   p7(newSize, vector<float>(newSize));
+		vvt a11(newSize, vt(newSize)),
+		   a12(newSize, vt(newSize)),
+		   a21(newSize, vt(newSize)),
+		   a22(newSize, vt(newSize)),		   
+		   b11(newSize, vt(newSize)),
+		   b12(newSize, vt(newSize)),
+		   b21(newSize, vt(newSize)),
+		   b22(newSize, vt(newSize)),
+		   aRes(newSize, vt(newSize)),
+		   bRes(newSize, vt(newSize)),
+		   c11(newSize, vt(newSize)),
+		   c12(newSize, vt(newSize)),
+		   c21(newSize, vt(newSize)),
+		   c22(newSize, vt(newSize)),
+		   p1(newSize, vt(newSize)),
+		   p2(newSize, vt(newSize)),
+		   p3(newSize, vt(newSize)),
+		   p4(newSize, vt(newSize)),
+		   p5(newSize, vt(newSize)),
+		   p6(newSize, vt(newSize)),
+		   p7(newSize, vt(newSize));
 		int i, j;
 
 		// Filling the 4 sub-matrices
