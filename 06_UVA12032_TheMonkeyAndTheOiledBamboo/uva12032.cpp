@@ -34,6 +34,6 @@ int main() {
 		while ( ! testK( minK ) )
 			++minK;
 		
-		cout << "Case " << i << ": " << minK << endl; 		
+		cout << "Case " << (i-1) << ": " << minK << endl; 		
 	}
 }
