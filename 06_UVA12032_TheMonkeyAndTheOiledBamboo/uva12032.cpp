@@ -25,6 +25,7 @@ int main() {
 		cin >> n;
 		cin >> r[0]; // First rung height from the ground
 		minK = r[0]; // Assumin minK as the first height
+		rDiff[0] = r[0];
 		for( int j = 1; j < n; ++j ) {
 			cin >> r[j];	// Each consecutive rung
 			rDiff[j] = r[j] - r[j-1];
@@ -34,6 +35,6 @@ int main() {
 		while ( ! testK( minK ) )
 			++minK;
 		
-		cout << "Case " << (i-1) << ": " << minK << endl; 		
+		cout << "Case " << (i+1) << ": " << minK << endl; 		
 	}
 }
