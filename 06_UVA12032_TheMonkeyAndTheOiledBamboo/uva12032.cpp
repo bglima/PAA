@@ -4,7 +4,7 @@ using namespace std;
 
 int t;		 // Number of test cases
 int n;		 // Number of rungs
-int r[100000];  // Heights of the rungs from the ground
+int r, rPrev;	 // Current rung
 int rDiff[100000]; // Difference between two consecutive rungs
 int minK;	   // Minnimum value for k
 
@@ -23,12 +23,12 @@ int main() {
 	cin >> t;
 	for( int i = 0; i < t; ++i ) {
 		cin >> n;
-		cin >> r[0]; // First rung height from the ground
-		minK = r[0]; // Assumin minK as the first height
-		rDiff[0] = r[0];
+		cin >> rPrev; // First rung height from the ground
+		minK = rDiff[0] = rPrev; // Assumin minK as the first height
 		for( int j = 1; j < n; ++j ) {
-			cin >> r[j];	// Each consecutive rung
-			rDiff[j] = r[j] - r[j-1];
+			cin >> r;	// Each consecutive rung
+			rDiff[j] = r - rPrev;
+			rPrev = r;
 			if ( rDiff[j] > minK ) minK = rDiff[j];	// minK should start at max diff between two consecutive rungs
 		}
 
