@@ -15,6 +15,9 @@ void updateGasUsed() {
 	gasUsed += dist * ( (float) consumption / 100.0 + leak );
 	distPrev = input1;
 }
+
+
+
 int main () {
 	cout.setf(ios::fixed,ios::floatfield);
     	cout.precision(3);
@@ -23,7 +26,8 @@ int main () {
 			case 'G':	// d Goal or d Gas station
 				if( input2[1] == 'o' ) {		// Goal
 					updateGasUsed();
-					cout << gasUsed << endl;
+					if ( gasUsed > maxGasUsed ) maxGasUsed = gasUsed;
+					cout << maxGasUsed << endl;
 				} else {				// Gas station
 					cin >> garbage; 		// Take word "Station"
 					updateGasUsed();
