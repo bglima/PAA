@@ -8,7 +8,7 @@ string input2, garbage;
 int consumption;
 int dist, distPrev;
 int leak;
-float gasUsed, maxGasUsed;
+double gasUsed, maxGasUsed;
 
 void updateGasUsed() {
 	dist = (input1 - distPrev);
