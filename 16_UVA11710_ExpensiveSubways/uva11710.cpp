@@ -27,12 +27,10 @@ int s, c;
 void init(int n);
 int set_find( int vector );
 bool set_union( int vector1, int vector2 );
-int cnt=0;
-
 
 int main() {
-    string st1, st2, from;
-    int dist;
+    string st1, st2;
+    int dist, total_dist;
 
     while ( cin >> s >> c ) {       
         if ( s + c == 0 ) return 0; 
@@ -55,11 +53,32 @@ int main() {
             pq.push(con);
         }
 
-        cin >> from;
-
-        cout << ++cnt << endl;
-    
+		// Starting station
+        cin >> st1; 
+		
+		// Set up union-find environment
+		for( int i = 0; i < s; ++i ) {
+			sets[i] = i;
+		}
+		
+		// For each edge, if not a cycle, add it
+		int current_edges = 0;
+		total_dist = 0;
+		while( !pq.empty() ) {
+			connection con = pq.top(); pq.pop();
+			if( set_union(con.from, con.to) ) {
+				++current_edges;
+				total_dist += con.dist;
+			}
+		}
+		
+		if( current_edges == s - 1 )
+			cout << total_dist << endl;
+		else
+			cout << "Impossible" << endl;	
+		
         
+        /*
         cout << s << " " << c << endl;
         for( int i = 0; i < s; ++i) 
             cout << stationNames[i] << endl;
@@ -67,9 +86,31 @@ int main() {
             connection con = pq.top(); pq.pop();
             cout << stationNames[ con.from ] << " " <<  stationNames[ con.to ] << " " << con.dist << endl;
         }
-        
+        */
     } 
     return 0;
+}
+
+int set_find( int vector ) {
+	if ( sets[vector] == vector )
+		return vector;
+	
+	return set_find(sets[vector]);
+}
+
+bool set_union( int vector1, int vector2 ) {
+	int set1 = set_find( vector1 );
+	int set2 = set_find( vector2 );
+	if ( set1 == set2 )
+		return false;
+	
+	// Preserve larger set. Those with smaller index are the largest, since they didn't change index yet.
+	if( sets[set1] < sets[set2] ) {
+		sets[set2] = sets[set1];
+	} else {
+		sets[set1] = sets[set2];
+	}
+	return true;
 }
 
 void init(int n) {
@@ -77,8 +118,6 @@ void init(int n) {
     stationNames.clear();
     sets.clear();
 
-//    stations.resize(n);
-//    stationNames.resize(n);
     sets.resize(n);
 }
 
