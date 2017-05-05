@@ -14,9 +14,11 @@ int main() {
     
 
     cin >> t;
+	cin.get();
     for(int i = 0; i < t; ++i) {
-        cin >> text;
-        cout << lps(text) << endl;
+        getline(cin, text);
+		cout << lps(text) << endl;
+		
     }
 
     return 0;
@@ -34,6 +36,11 @@ void printMatrix(int n) {
 // Find Largest Palindrome Subsequence
 // Returns its size
 int lps(string &text) {
+	
+	// Checking empty string
+	if( text.empty() )
+		return 0;
+	
     int n = text.length();
     //cout << "LENGHT: " << n << endl;
    
