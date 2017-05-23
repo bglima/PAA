@@ -29,8 +29,6 @@ int set_find( int vector );
 bool set_union( int vector1, int vector2 );
 void insertCity(string cityName);
 
-
-
 int main() {
 	string st1, st2;
 	int cost;
