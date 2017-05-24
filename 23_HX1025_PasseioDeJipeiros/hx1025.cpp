@@ -19,6 +19,8 @@ void dijkstra(vector< vector<road> > &adj_list, int s);
 int n,  // Total of all locations
 	k,  // Total of cities
 	m;  // Total of roads
+
+vector <int> cityOf;
 	
 int main() {
 	int u, v, c, d;
@@ -28,7 +30,8 @@ int main() {
 	
 	cin >> n >> k;
 	
-	vector <int> cityOf(n);
+	cityOf.clear();
+	cityOf.resize(n);
 	
 	// Read number of places followed by number of cities
 	cout << n << " " << k << endl;	
@@ -78,7 +81,7 @@ void dijkstra(vector< vector<road> > &adj_list, int s) {
 	dist[s] = 0;
 	queue.push( make_pair(dist[s],s) );
 	
-	// Finding the shortest path from 's' to all vertices
+	// Finding shortest path from 's' to all vertices
 	while( !queue.empty() )
 	{
 		int u = queue.top().second;
@@ -92,7 +95,6 @@ void dijkstra(vector< vector<road> > &adj_list, int s) {
 			int v = adj_list[u][j].v;
 			int d = adj_list[u][j].d;
 			
-
 			if ( dist[u] + d < dist[v] )
 			{
 				dist[v] = dist[u] + d;
@@ -102,14 +104,54 @@ void dijkstra(vector< vector<road> > &adj_list, int s) {
 		}
 	}
 	
-	for( int i = 0; i < n; ++i ) {		
-		cout << "Distance from  0 to " << i << " : " << dist[i] << endl;
-	} 
+	// We need the list of used cities
+	map<int, bool> cities_used;
 	
+	// Now, we have the shortest path...
 	cout << "Shortest path" << endl;
-	int i = 21;
+	int v = 21;
 	do {
-		cout << i << " " ;
-	} while( (i = prev[i]) != -1 );
+		cout << v << " " ;
+		int city = cityOf[v] ;
+		
+		// Storing all used cities in a map
+		if ( cities_used.find( city ) == cities_used.end() ) {
+			cities_used[city] = true;
+		}
+			
+	} while( (v = prev[v]) != -1 );
+	
+	// Creating a new adjacency list, where all locations are from visited cities
+	vector< vector<road> > new_list;
+	new_list.clear();
+	new_list.resize(n);
+	
+	
+	for(int u = 0; u < adj_list.size(); ++u ) {
+		for( int j = 0; j < adj_list[u].size(); ++j) {
+			road r = adj_list[u][j];
+			int v = r.v;
+			
+			// Add at new adjacency list only those roads who connects visited cities
+			if( cities_used.find( cityOf[u] ) != cities_used.end() &&
+				cities_used.find( cityOf[v] ) != cities_used.end() ) {
+					new_list[u].push_back(r);
+				}
+			
+		}
+	}
+	
+	
+	
+	// Testing new adjacency list
+	cout << endl;
+	for(int u = 0; u < new_list.size(); ++u) {
+		for(int j = 0; j < new_list[u].size(); ++j ) {
+			road r = new_list[u][j];
+			cout << "In city " << cityOf[r.u] << " " << cityOf[r.v] << " From " << r.u << " to " << r.v << " with c " << r.c << " and d " << r.d << endl;
+		}
+		
+	}
+	
 	
 }
