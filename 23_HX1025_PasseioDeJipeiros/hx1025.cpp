@@ -14,7 +14,7 @@ struct road {
 	int d;
 } ;
 
-void dijkstra(vector< vector<road> > &adj_list, int s);
+void dijkstra(vector< vector<road> > &adj_list, int s, int to);
 
 int n,  // Total of all locations
 	k,  // Total of cities
@@ -27,18 +27,15 @@ int main() {
 	int i;
 	string line;
 	
-	
+	// Read number of places followed by number of cities
 	cin >> n >> k;
 	
 	cityOf.clear();
 	cityOf.resize(n);
-	
-	// Read number of places followed by number of cities
-	cout << n << " " << k << endl;	
+
 	
 	cin.clear();
 	cin.ignore(1000,'\n');
-	
 	for( i = 0; i < k; ++i ) {		
 		getline(std::cin,line);
 		istringstream  is( line );
@@ -66,12 +63,28 @@ int main() {
 		adj_list[u].push_back(r);
 	}
 	
-	dijkstra(adj_list, 0);
+	cout << endl << endl;
+	for( u = 0; u < n; ++u ) {
+		for( int j = 0; j < adj_list[u].size(); ++j ) {
+			road r = adj_list[u][j];
+			cout << r.u << " " << r.v << " " << r.c << " " << r.d << endl;
+		}
+	}
+	
+	dijkstra(adj_list, 0, 21);
+	
+	cout << endl << endl;
+	for( u = 0; u < n; ++u ) {
+		for( int j = 0; j < adj_list[u].size(); ++j ) {
+			road r = adj_list[u][j];
+			cout << r.u << " " << r.v << " " << r.c << " " << r.d << endl;
+		}
+	}
 
 	return 0;
 }
 
-void dijkstra(vector< vector<road> > &adj_list, int s) {
+void dijkstra(vector< vector<road> > &adj_list, int s, int to) {
 	priority_queue< ii, vector<ii>, less<ii> > queue;
 	
 	vector<int> dist(n, INT_MAX); // dist, parent
@@ -109,7 +122,7 @@ void dijkstra(vector< vector<road> > &adj_list, int s) {
 	
 	// Now, we have the shortest path...
 	cout << "Shortest path" << endl;
-	int v = 21;
+	int v = to;
 	do {
 		cout << v << " " ;
 		int city = cityOf[v] ;
@@ -122,11 +135,7 @@ void dijkstra(vector< vector<road> > &adj_list, int s) {
 	} while( (v = prev[v]) != -1 );
 	
 	// Creating a new adjacency list, where all locations are from visited cities
-	vector< vector<road> > new_list;
-	new_list.clear();
-	new_list.resize(n);
-	
-	
+	vector< vector<road> > new_list(n);
 	for(int u = 0; u < adj_list.size(); ++u ) {
 		for( int j = 0; j < adj_list[u].size(); ++j) {
 			road r = adj_list[u][j];
@@ -137,21 +146,10 @@ void dijkstra(vector< vector<road> > &adj_list, int s) {
 				cities_used.find( cityOf[v] ) != cities_used.end() ) {
 					new_list[u].push_back(r);
 				}
-			
 		}
 	}
 	
-	
-	
-	// Testing new adjacency list
-	cout << endl;
-	for(int u = 0; u < new_list.size(); ++u) {
-		for(int j = 0; j < new_list[u].size(); ++j ) {
-			road r = new_list[u][j];
-			cout << "In city " << cityOf[r.u] << " " << cityOf[r.v] << " From " << r.u << " to " << r.v << " with c " << r.c << " and d " << r.d << endl;
-		}
-		
-	}
-	
-	
+	adj_list.clear();
+	adj_list = new_list;
+
 }
