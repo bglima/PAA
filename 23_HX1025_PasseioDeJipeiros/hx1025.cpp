@@ -3,9 +3,9 @@
 #define ii pair <int, int> 
 #define vi vector < int> 
 #define vvi vector < vi > 
+#define MAX 5005
 
 using namespace std;
-
 
 struct road {
 	int u;
@@ -14,7 +14,11 @@ struct road {
 	int d;
 } ;
 
-void dijkstra(vector< vector<road> > &adj_list, int s, int to);
+int dijkstra(vector< vector<road> > &adj_list, int s, int to);
+int send(int s, int t, int minn);
+
+int G[MAX][MAX], F[MAX][MAX];
+bool V[MAX];
 
 int n,  // Total of all locations
 	k,  // Total of cities
@@ -33,6 +37,9 @@ int main() {
 	cityOf.clear();
 	cityOf.resize(n);
 
+	memset(G, 0, sizeof(G));
+	memset(F, 0, sizeof(F));
+	memset(V, 0, sizeof(V));
 	
 	cin.clear();
 	cin.ignore(1000,'\n');
@@ -63,28 +70,45 @@ int main() {
 		adj_list[u].push_back(r);
 	}
 	
-	cout << endl << endl;
-	for( u = 0; u < n; ++u ) {
-		for( int j = 0; j < adj_list[u].size(); ++j ) {
-			road r = adj_list[u][j];
-			cout << r.u << " " << r.v << " " << r.c << " " << r.d << endl;
-		}
+	// Reading source and destination
+	cin >> u >> v;
+	
+	cout << dijkstra(adj_list, u, v) << endl;
+	
+	// Calculating maximum flow
+	int total_flow = 0;
+	while( int sent = send(u, v, INT_MAX) ) {
+		total_flow += sent;
+		memset(V, 0, sizeof(V));
 	}
 	
-	dijkstra(adj_list, 0, 21);
-	
-	cout << endl << endl;
-	for( u = 0; u < n; ++u ) {
-		for( int j = 0; j < adj_list[u].size(); ++j ) {
-			road r = adj_list[u][j];
-			cout << r.u << " " << r.v << " " << r.c << " " << r.d << endl;
-		}
-	}
+	cout << total_flow << endl;
 
 	return 0;
 }
 
-void dijkstra(vector< vector<road> > &adj_list, int s, int to) {
+int send(int s, int t, int minn) {
+	V[s] = true;
+	
+	if (s == t) return minn;
+	
+	for(int i=0; i<n; i++) {
+		int capacity = G[s][i]-F[s][i];
+		if (!V[i] && G[s][i]-F[s][i] > 0) {
+			if (int sent = send(i, t, min(minn, capacity))) {
+				F[s][i] += sent;
+				F[i][s] -= sent;
+				return sent;
+			}
+		}
+	}
+    
+    return 0;
+}
+
+int dijkstra(vector< vector<road> > &adj_list, int s, int to) {
+	int total_cost = 0;
+	
 	priority_queue< ii, vector<ii>, less<ii> > queue;
 	
 	vector<int> dist(n, INT_MAX); // dist, parent
@@ -121,10 +145,13 @@ void dijkstra(vector< vector<road> > &adj_list, int s, int to) {
 	map<int, bool> cities_used;
 	
 	// Now, we have the shortest path...
-	cout << "Shortest path" << endl;
+	// cout << "Shortest path" << endl;
 	int v = to;
+	total_cost = dist[v];
 	do {
-		cout << v << " " ;
+		// Uncomment to print locations used
+		// cout << v << " " ;
+		
 		int city = cityOf[v] ;
 		
 		// Storing all used cities in a map
@@ -144,12 +171,19 @@ void dijkstra(vector< vector<road> > &adj_list, int s, int to) {
 			// Add at new adjacency list only those roads who connects visited cities
 			if( cities_used.find( cityOf[u] ) != cities_used.end() &&
 				cities_used.find( cityOf[v] ) != cities_used.end() ) {
+					// Add to new adjacency list
 					new_list[u].push_back(r);
+					
+					// Add capacity to adjacency matrix
+					G[u][v] = G[v][u] += r.c;
 				}
 		}
 	}
 	
 	adj_list.clear();
 	adj_list = new_list;
-
+	
+	return total_cost;
 }
+
+
