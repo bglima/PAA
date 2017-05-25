@@ -175,7 +175,7 @@ int dijkstra(vector< vector<road> > &adj_list, int s, int to) {
 					new_list[u].push_back(r);
 					
 					// Add capacity to adjacency matrix
-					G[u][v] = G[v][u] += r.c;
+					G[u][v] += r.c;
 				}
 		}
 	}
